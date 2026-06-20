@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>첫눈예측 웹앱 배경 디자인 - 다운로드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans CJK KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .info-box {
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .info-box ol {
+            margin-left: 20px;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .info-box li {
+            margin-bottom: 8px;
+        }
+        
+        .designs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .design-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .design-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .design-preview {
+            width: 100%;
+            aspect-ratio: 9/16;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .design-info {
+            padding: 15px;
+        }
+        
+        .design-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .design-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .design-desc {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .download-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+        
+        .download-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .difficulty {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .star {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>❄️ 첫눈예측 웹앱 배경 디자인</h1>
+            <p>24가지 디자인 중 선택해서 다운로드하세요!</p>
+        </div>
+        
+        <div class="info-box">
+            <h3>📥 사용 방법</h3>
+            <ol>
+                <li>아래에서 원하는 디자인의 <strong>"다운로드"</strong> 버튼을 클릭</li>
+                <li>PNG 파일이 자동으로 다운로드됨</li>
+                <li>모든 파일을 구글 드라이브나 클래스룸에 업로드</li>
+                <li>학생들에게 다운로드 링크 공유</li>
+                <li>학생들이 캔바에서 배경으로 업로드하여 수정</li>
+            </ol>
+        </div>
+        
+        <div class="designs-grid" id="designsGrid"></div>
+        
+        <div class="footer">
+            <p>💡 팁: 마우스 우클릭 → "이미지 다른 이름으로 저장"으로도 다운로드할 수 있습니다.</p>
+            <p style="margin-top: 20px; opacity: 0.8;">© 2024 첫눈예측 웹앱 프로젝트</p>
+        </div>
+    </div>
+
+    <script>
+        const designs = [
+            { num: 1, name: 'Minimal Light', desc: '깔끔한 파란색 강조 디자인', difficulty: '⭐', colors: ['#ffffff', '#e3f2fd', '#1976d2'] },
+            { num: 2, name: 'Aurora Borealis', desc: '오로라가 춤추는 신비로운 밤', difficulty: '⭐⭐⭐', colors: ['#0a0015', '#1a0033', '#003d33', '#4caf50', '#9c27b0'] },
+            { num: 3, name: 'Falling Snow', desc: '눈이 내려오는 밤하늘', difficulty: '⭐⭐', colors: ['#1a1a2e', '#ffffff', '#42a5f5'] },
+            { num: 4, name: 'Pastel Sky', desc: '부드러운 하늘색 그라데이션', difficulty: '⭐', colors: ['#e1f5fe', '#b3e5fc', '#81d4fa', '#0277bd'] },
+            { num: 5, name: 'Winter Forest', desc: '숲과 눈의 조화', difficulty: '⭐⭐', colors: ['#c8e6c9', '#81c784', '#558b2f', '#ffffff'] },
+            { num: 6, name: 'Cool Blue', desc: '차가운 파란 톤', difficulty: '⭐', colors: ['#b3e5fc', '#81d4fa', '#4fc3f7', '#0277bd', '#01579b'] },
+            { num: 7, name: 'Starry Night', desc: '별 가득한 겨울밤', difficulty: '⭐⭐', colors: ['#001a33', '#000d1a', '#ffeb3b', '#fbc02d'] },
+            { num: 8, name: 'Sunset Gradient', desc: '따뜻한 저녁 하늘', difficulty: '⭐', colors: ['#ffccbc', '#ffab91', '#ff8a65', '#ff7043', '#bf360c'] },
+            { num: 9, name: 'Retro 8-bit', desc: '픽셀 스타일 레트로', difficulty: '⭐⭐', colors: ['#1a1a3a', '#ffff00', '#00ff00', '#0099ff', '#ff0099'] },
+            { num: 10, name: 'Frosted Glass', desc: '얼음 같은 프로스트 느낌', difficulty: '⭐⭐', colors: ['#e6f1fb', '#c3e7ff', '#0277bd'] },
+            { num: 11, name: 'Warm Evening', desc: '따뜻한 주황 톤', difficulty: '⭐', colors: ['#ffe0b2', '#ffcc80', '#ffb74d', '#e65100'] },
+            { num: 12, name: 'Abstract Geometric', desc: '현대 미술 느낌', difficulty: '⭐⭐⭐', colors: ['#c3e7ff', '#b3e5fc', '#0277bd', '#01579b', '#00838f'] },
+            { num: 13, name: 'Milky Way', desc: '은하수가 빛나는 밤', difficulty: '⭐⭐', colors: ['#0d0221', '#1d0b69', '#2d0b4e', '#b0e0e6', '#6a5acd'] },
+            { num: 14, name: 'Ice Crystals', desc: '섬세한 얼음 결정체 패턴', difficulty: '⭐⭐', colors: ['#b3e5fc', '#80deea', '#0277bd', '#01579b'] },
+            { num: 15, name: 'Blizzard', desc: '소용돌이치는 눈 폭풍', difficulty: '⭐⭐', colors: ['#4a90e2', '#357abd', '#ffffff'] },
+            { num: 16, name: 'Cozy Clouds', desc: '포근한 구름 일러스트', difficulty: '⭐⭐', colors: ['#f0f4f8', '#e3f2fd', '#ffffff', '#01579b', '#0288d1'] },
+            { num: 17, name: 'Winter City', desc: '겨울 도시 야경', difficulty: '⭐⭐', colors: ['#1a237e', '#283593', '#3f51b5', '#ffeb3b', '#fbc02d'] },
+            { num: 18, name: 'Ice Hole', desc: '얼음 위의 검은 구멍', difficulty: '⭐⭐', colors: ['#eceff1', '#cfd8dc', '#b0bec5', '#455a64', '#004d73'] },
+            { num: 19, name: 'Cool Mint', desc: '신선한 민트 톤', difficulty: '⭐', colors: ['#b2dfdb', '#80cbc4', '#4db6ac', '#00695c', '#00796b'] },
+            { num: 20, name: 'Space', desc: '우주 공간 느낌', difficulty: '⭐⭐', colors: ['#1a0033', '#0a0015', '#ff00ff', '#00ffff', '#b300ff'] },
+            { num: 21, name: 'Snowflake Pattern', desc: '눈송이 반복 패턴', difficulty: '⭐⭐', colors: ['#e0f2f1', '#b2dfdb', '#00695c', '#00897b'] },
+            { num: 22, name: 'Neon Glow', desc: '네온 빛 사이버펑크', difficulty: '⭐⭐', colors: ['#1a1a2e', '#0f0f1e', '#00ffff'] },
+            { num: 23, name: 'Watercolor', desc: '수채화 겨울', difficulty: '⭐⭐', colors: ['#f3e5f5', '#e1bee7', '#ce93d8', '#7e57c2', '#6a1b9a'] },
+            { num: 24, name: 'Aurora Rainbow', desc: '무지개 오로라 콤보', difficulty: '⭐⭐⭐⭐', colors: ['#0a0015', '#1a0044', '#003d66', '#002e4d', '#4caf50', '#2196f3', '#ff1493'] }
+        ];
+
+        function drawDesign(canvas, designNum, colors) {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 배경 그리기
+            switch(designNum) {
+                case 1: // Minimal Light
+                    const grad1 = ctx.createLinearGradient(0, 0, width, height);
+                    grad1.addColorStop(0, '#ffffff');
+                    grad1.addColorStop(1, '#e3f2fd');
+                    ctx.fillStyle = grad1;
+                    ctx.fillRect(0, 0, width, height);
+                    break;
+                case 2: // Aurora
+                    const grad2 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad2.addColorStop(0, '#0a0015');
+                    grad2.addColorStop(0.4, '#1a0033');
+                    grad2.addColorStop(1, '#003d33');
+                    ctx.fillStyle = grad2;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.strokeStyle = '#4caf50';
+                    ctx.lineWidth = 3;
+                    ctx.globalAlpha = 0.6;
+                    ctx.beginPath();
+                    ctx.bezierCurveTo(0, height*0.6, width/2, height*0.3, width, height*0.6);
+                    ctx.stroke();
+                    ctx.strokeStyle = '#9c27b0';
+                    ctx.lineWidth = 2;
+                    ctx.globalAlpha = 0.5;
+                    ctx.beginPath();
+                    ctx.bezierCurveTo(0, height*0.65, width/2, height*0.35, width, height*0.65);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                    break;
+                case 3: // Falling Snow
+                    ctx.fillStyle = '#1a1a2e';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.globalAlpha = 0.8;
+                    for(let i = 0; i < 20; i++) {
+                        ctx.beginPath();
+                        ctx.arc(Math.random()*width, Math.random()*height, Math.random()*4, 0, Math.PI*2);
+                        ctx.fill();
+                    }
+                    ctx.globalAlpha = 1;
+                    break;
+                case 4: // Pastel Sky
+                    const grad4 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad4.addColorStop(0, '#e1f5fe');
+                    grad4.addColorStop(0.5, '#b3e5fc');
+                    grad4.addColorStop(1, '#81d4fa');
+                    ctx.fillStyle = grad4;
+                    ctx.fillRect(0, 0, width, height);
+                    break;
+                case 5: // Winter Forest
+                    const grad5 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad5.addColorStop(0, '#c8e6c9');
+                    grad5.addColorStop(0.5, '#81c784');
+                    grad5.addColorStop(1, '#558b2f');
+                    ctx.fillStyle = grad5;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.globalAlpha = 0.7;
+                    ctx.beginPath();
+                    ctx.moveTo(width*0.3, height*0.4);
+                    ctx.lineTo(width*0.5, height*0.6);
+                    ctx.lineTo(width*0.1, height*0.6);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.globalAlpha = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(width*0.7, height*0.5);
+                    ctx.lineTo(width*0.9, height*0.75);
+                    ctx.lineTo(width*0.5, height*0.75);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                    break;
+                case 6: // Cool Blue
+                    const grad6 = ctx.createLinearGradient(0, 0, width, height);
+                    grad6.addColorStop(0, '#b3e5fc');
+                    grad6.addColorStop(0.5, '#81d4fa');
+                    grad6.addColorStop(1, '#4fc3f7');
+                    ctx.fillStyle = grad6;
+                    ctx.fillRect(0, 0, width, height);
+                    break;
+                case 7: // Starry Night
+                    ctx.fillStyle = '#001a33';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#ffeb3b';
+                    for(let i = 0; i < 30; i++) {
+                        const size = Math.random()*2;
+                        ctx.beginPath();
+                        ctx.arc(Math.random()*width, Math.random()*height, size, 0, Math.PI*2);
+                        ctx.fill();
+                    }
+                    break;
+                case 8: // Sunset
+                    const grad8 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad8.addColorStop(0, '#ffccbc');
+                    grad8.addColorStop(0.3, '#ffab91');
+                    grad8.addColorStop(0.6, '#ff8a65');
+                    grad8.addColorStop(1, '#ff7043');
+                    ctx.fillStyle = grad8;
+                    ctx.fillRect(0, 0, width, height);
+                    break;
+                case 9: // Retro 8-bit
+                    ctx.fillStyle = '#1a1a3a';
+                    ctx.fillRect(0, 0, width, height);
+                    const colors9 = ['#ffff00', '#00ff00', '#0099ff', '#ff0099'];
+                    for(let i = 0; i < 30; i++) {
+                        ctx.fillStyle = colors9[Math.floor(Math.random()*4)];
+                        ctx.fillRect(Math.random()*width, Math.random()*height, 15, 15);
+                    }
+                    break;
+                case 10: // Frosted
+                    const grad10 = ctx.createLinearGradient(0, 0, width, height);
+                    grad10.addColorStop(0, '#e6f1fb');
+                    grad10.addColorStop(1, '#c3e7ff');
+                    ctx.fillStyle = grad10;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.strokeStyle = '#0277bd';
+                    ctx.globalAlpha = 0.4;
+                    for(let i = 0; i < 5; i++) {
+                        ctx.beginPath();
+                        ctx.arc(Math.random()*width, Math.random()*height, Math.random()*30+10, 0, Math.PI*2);
+                        ctx.stroke();
+                    }
+                    ctx.globalAlpha = 1;
+                    break;
+                case 11: // Warm Evening
+                    const grad11 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad11.addColorStop(0, '#ffe0b2');
+                    grad11.addColorStop(0.4, '#ffcc80');
+                    grad11.addColorStop(1, '#ffb74d');
+                    ctx.fillStyle = grad11;
+                    ctx.fillRect(0, 0, width, height);
+                    break;
+                case 12: // Abstract
+                    const grad12 = ctx.createLinearGradient(0, 0, width, height);
+                    grad12.addColorStop(0, '#c3e7ff');
+                    grad12.addColorStop(1, '#b3e5fc');
+                    ctx.fillStyle = grad12;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#0277bd';
+                    ctx.globalAlpha = 0.5;
+                    ctx.fillRect(width*0.1, height*0.1, width*0.15, width*0.15);
+                    ctx.fillRect(width*0.55, height*0.1, width*0.14, width*0.14);
+                    ctx.beginPath();
+                    ctx.arc(width*0.3, height*0.6, width*0.08, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                    break;
+                case 13: // Milky Way
+                    const grad13 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad13.addColorStop(0, '#0d0221');
+                    grad13.addColorStop(0.5, '#1d0b69');
+                    grad13.addColorStop(1, '#2d0b4e');
+                    ctx.fillStyle = grad13;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#b0e0e6';
+                    ctx.globalAlpha = 0.7;
+                    for(let i = 0; i < 20; i++) {
+                        ctx.beginPath();
+                        ctx.arc(Math.random()*width, height*0.3 + Math.random()*height*0.3, Math.random()*1.5, 0, Math.PI*2);
+                        ctx.fill();
+                    }
+                    ctx.globalAlpha = 1;
+                    break;
+                case 14: // Ice Crystals
+                    const grad14 = ctx.createLinearGradient(0, 0, width, height);
+                    grad14.addColorStop(0, '#b3e5fc');
+                    grad14.addColorStop(1, '#80deea');
+                    ctx.fillStyle = grad14;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.strokeStyle = '#0277bd';
+                    ctx.lineWidth = 1.5;
+                    ctx.globalAlpha = 0.6;
+                    ctx.beginPath();
+                    ctx.moveTo(width*0.4, height*0.3);
+                    ctx.lineTo(width*0.4, height*0.5);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(width*0.3, height*0.4);
+                    ctx.lineTo(width*0.5, height*0.4);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                    break;
+                case 15: // Blizzard
+                    const grad15 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad15.addColorStop(0, '#4a90e2');
+                    grad15.addColorStop(1, '#357abd');
+                    ctx.fillStyle = grad15;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.globalAlpha = 0.5;
+                    for(let i = 0; i < 25; i++) {
+                        ctx.beginPath();
+                        ctx.arc(Math.random()*width, Math.random()*height, Math.random()*3, 0, Math.PI*2);
+                        ctx.fill();
+                    }
+                    ctx.globalAlpha = 1;
+                    break;
+                case 16: // Cozy Clouds
+                    const grad16 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad16.addColorStop(0, '#f0f4f8');
+                    grad16.addColorStop(1, '#e3f2fd');
+                    ctx.fillStyle = grad16;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.globalAlpha = 0.7;
+                    ctx.beginPath();
+                    ctx.ellipse(width*0.35, height*0.3, width*0.2, height*0.1, 0, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.ellipse(width*0.65, height*0.35, width*0.18, height*0.09, 0, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                    break;
+                case 17: // Winter City
+                    const grad17 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad17.addColorStop(0, '#1a237e');
+                    grad17.addColorStop(0.6, '#283593');
+                    grad17.addColorStop(1, '#3f51b5');
+                    ctx.fillStyle = grad17;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#ffeb3b';
+                    ctx.globalAlpha = 0.8;
+                    ctx.fillRect(width*0.2, height*0.4, width*0.12, height*0.25);
+                    ctx.fillRect(width*0.45, height*0.3, width*0.15, height*0.35);
+                    ctx.fillRect(width*0.7, height*0.45, width*0.12, height*0.2);
+                    ctx.globalAlpha = 1;
+                    break;
+                case 18: // Ice Hole
+                    const grad18 = ctx.createLinearGradient(0, 0, width, height);
+                    grad18.addColorStop(0, '#eceff1');
+                    grad18.addColorStop(0.5, '#cfd8dc');
+                    grad18.addColorStop(1, '#b0bec5');
+                    ctx.fillStyle = grad18;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.strokeStyle = '#455a64';
+                    ctx.lineWidth = 2;
+                    ctx.globalAlpha = 0.5;
+                    ctx.beginPath();
+                    ctx.arc(width*0.5, height*0.4, width*0.2, 0, Math.PI*2);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                    break;
+                case 19: // Cool Mint
+                    const grad19 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad19.addColorStop(0, '#b2dfdb');
+                    grad19.addColorStop(0.5, '#80cbc4');
+                    grad19.addColorStop(1, '#4db6ac');
+                    ctx.fillStyle = grad19;
+                    ctx.fillRect(0, 0, width, height);
+                    break;
+                case 20: // Space
+                    ctx.fillStyle = '#1a0033';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#ff00ff';
+                    ctx.globalAlpha = 0.4;
+                    ctx.beginPath();
+                    ctx.arc(width*0.3, height*0.2, width*0.12, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.fillStyle = '#00ffff';
+                    ctx.beginPath();
+                    ctx.arc(width*0.7, height*0.35, width*0.08, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                    break;
+                case 21: // Snowflake Pattern
+                    const grad21 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad21.addColorStop(0, '#e0f2f1');
+                    grad21.addColorStop(1, '#b2dfdb');
+                    ctx.fillStyle = grad21;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.strokeStyle = '#00695c';
+                    ctx.lineWidth = 1;
+                    ctx.globalAlpha = 0.5;
+                    for(let i = 0; i < 4; i++) {
+                        ctx.beginPath();
+                        ctx.moveTo(width*(0.2 + i*0.2), height*0.3);
+                        ctx.lineTo(width*(0.2 + i*0.2), height*0.5);
+                        ctx.stroke();
+                    }
+                    ctx.globalAlpha = 1;
+                    break;
+                case 22: // Neon Glow
+                    const grad22 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad22.addColorStop(0, '#1a1a2e');
+                    grad22.addColorStop(1, '#0f0f1e');
+                    ctx.fillStyle = grad22;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.strokeStyle = '#00ffff';
+                    ctx.lineWidth = 2;
+                    ctx.globalAlpha = 0.5;
+                    ctx.strokeRect(width*0.15, height*0.2, width*0.7, height*0.6);
+                    ctx.globalAlpha = 1;
+                    break;
+                case 23: // Watercolor
+                    const grad23 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad23.addColorStop(0, '#f3e5f5');
+                    grad23.addColorStop(0.4, '#e1bee7');
+                    grad23.addColorStop(1, '#ce93d8');
+                    ctx.fillStyle = grad23;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#7e57c2';
+                    ctx.globalAlpha = 0.2;
+                    ctx.beginPath();
+                    ctx.ellipse(width*0.35, height*0.4, width*0.27, height*0.22, 0, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                    break;
+                case 24: // Aurora Rainbow
+                    const grad24 = ctx.createLinearGradient(0, 0, 0, height);
+                    grad24.addColorStop(0, '#0a0015');
+                    grad24.addColorStop(0.2, '#1a0044');
+                    grad24.addColorStop(0.4, '#003d66');
+                    grad24.addColorStop(0.6, '#002e4d');
+                    grad24.addColorStop(1, '#1a0033');
+                    ctx.fillStyle = grad24;
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.lineWidth = 4;
+                    ctx.globalAlpha = 0.6;
+                    ctx.strokeStyle = '#4caf50';
+                    ctx.beginPath();
+                    ctx.quadraticCurveTo(width/2, height*0.2, width, height*0.6);
+                    ctx.stroke();
+                    ctx.strokeStyle = '#2196f3';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.quadraticCurveTo(width/2, height*0.3, width, height*0.65);
+                    ctx.stroke();
+                    ctx.strokeStyle = '#ff1493';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.quadraticCurveTo(width/2, height*0.4, width, height*0.68);
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                    break;
+            }
+        }
+
+        function downloadDesign(num, name) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 375;
+            canvas.height = 667;
+            
+            drawDesign(canvas, num, []);
+            
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${num}_${name}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        // 그리드 생성
+        const grid = document.getElementById('designsGrid');
+        designs.forEach(design => {
+            const card = document.createElement('div');
+            card.className = 'design-card';
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = 300;
+            canvas.height = 533;
+            canvas.className = 'design-preview';
+            
+            drawDesign(canvas, design.num, design.colors);
+            
+            const info = document.createElement('div');
+            info.className = 'design-info';
+            info.innerHTML = `
+                <div class="design-number">${design.num}</div>
+                <div class="design-name">${design.name}</div>
+                <div class="design-desc">${design.desc}</div>
+                <div class="difficulty">난이도: ${design.difficulty}</div>
+                <button class="download-btn" onclick="downloadDesign(${design.num}, '${design.name}')">📥 다운로드</button>
+            `;
+            
+            card.appendChild(canvas);
+            card.appendChild(info);
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>
